@@ -54,10 +54,10 @@ This file may be parsed with the values as below without issue.
 ################
 
 COREIN coreresponse.vs.time
-COREOUT quick_core.dat
-BETAOUT quick_beta.dat
-CLNTOUT quick_clnt.dat
-XPSOUT 	quick_xps.dat
+COREOUT core.dat
+BETAOUT beta.dat
+CLNTOUT clnt.dat
+XPSOUT xps.dat
 
 num_beta_steps 4000
 num_clnt_steps 4000
