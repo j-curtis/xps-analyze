@@ -1,0 +1,20 @@
+COREIN coreresponse.vs.time
+COREOUT quick_core.dat
+BETAOUT quick_beta.dat
+CLNTOUT quick_clnt.dat
+XPSOUT 	quick_xps.dat
+
+num_beta_steps 4000
+num_clnt_steps 4000
+num_xps_steps 8000
+
+max_w_beta 10.0
+max_t_clnt 100.0
+max_w_xps 10.0
+
+core_uniform_width 0.005
+core_uniform_order 2.0
+core_high_w_width 0.0
+core_high_w_order 2.0
+xps_width .005
+xps_order 2.0
