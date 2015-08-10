@@ -1,3 +1,58 @@
+This is a sample input file for the program.
+The program will parse this file for lines beginning with the accepted flags and then isolate the values the flag indicates.
+The order of the lines don't matter.
+The parser will interpret the first string of a line as the flag and compare it to a list of known flags.
+The parser is case sensitive.
+If the flag doesn't match the line will be ignored. These lines can thus serve as comment lines.
+If the flag is recognized, then the next string (seperated by whitespace) after the flag will be interpretted as the value.
+If the value cannot be interpreted properly (for instance, it is a string when it should be an integer), undefined behavior may result.
+The remainder of the line after the value will not be parsed and can also be used for comments.
+There are no default values for any parameters, and all must be supplied correctly.
+In particular, the parameters describing the size of the input arrays (XAS and XPS) must be correct, or undefined (probably memory errors) behavior may result.
+The flags are as follows (note the # beginning the lines so that they are not interpreted as actual flags):
+
+# COREIN = (string) the file where the core response data will be read in from
+
+# COREOUT = (string) the file where the processed core response data will be read in from
+
+# BETAOUT = (string) the file where beta (quasiparticle spectrum) will be written to
+
+# CLNTOUT = (string) the file where the cumulant will be written to
+
+# XPSOUT = (string) the file where the XPS will be written to
+
+# num_beta_steps = (int) the number of frequency steps we compute beta for. Default is num_core_steps. 
+
+# num_clnt_steps = (int) the number of time steps we compute the cumulant for. Default is num_core_steps. 
+
+# num_xps_steps = (int) the number of frequency steps we compute the xps for. Default is 2*num_beta_steps. 
+
+# max_w_beta = (double) The highest frequency we compute beta to. Default is the Nyqusit frequency/1.5. Value is in Hartree.
+
+# max_t_clnt = (double) The largest time we compute the cumulant to. Default is the Nyquist time/1.5 (analogous to the Nyquist frequency for an inverse FT). Value is in AUtime.
+
+# max_w_xps = (double) The largest time we compute the xps to (symmetrically about 0). The default is the Nyquist frequency from the cumulant time step/1.5. Value is in Hartree.
+
+# core_uniform_width = The width of the uniform spectral broadening applied to the core response data. Default of 0.0. Value is in Hartrees.
+
+# core_uniform_order = The order of the uniform spectral broadening applied to the core response data. Default of 2.0. Value is unitless.
+
+# core_high_w_width = The width of the high frequency broadening applied to the core response data. Default is 0.0. Value is unitless.
+
+# core_high_w_order = The order of the high frequency broadening applied to the core response data. Default is 2.0. Value is unitless.
+
+# xps_width = The width of the uniform spectral broadening applied to the XPS spectrum. Default is 0.0. Value is in Hartrees.
+
+# xps_order = The order of the uniform spectral broadening applied to the XPS spectrum. Default is 2.0. Value is unitless.
+
+The output of the program contains a detailed list of all the variables and results (except for the functions, which are printed to the given files).
+It is, in theory, possible to parse the output of the program into the program to run the same exact program, though this is not recommended or tested substantially.
+
+This file may be parsed with the values as below without issue.
+################
+##PARAMETERS####
+################
+
 COREIN coreresponse.vs.time
 COREOUT quick_core.dat
 BETAOUT quick_beta.dat
