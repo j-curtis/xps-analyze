@@ -425,12 +425,12 @@ int main(int argc, char * argv[]){
 	cout<<endl;
 	cout<<"coreav1 "<<coreav1<<" Hartree"<<endl;
 	cout<<"coreav2 "<<coreav2<<" Hartree"<<endl;
-	cout<<"quasi_peak_shift "<<quasi_peak_shift<<" Hartree"<<endl;
+	cout<<"quasi_peak_shift "<<quasi_peak_shift*hartree<<" eV"<<endl;
 	cout<<"quasi_peak_weight "<<quasi_peak_weight<<endl;
-	cout<<"main_peak_weight "<<main_peak_weight<<endl;
+	cout<<"sat_peak_weight "<<main_peak_weight<<endl;
 	cout<<"spec_norm "<<spec_norm<<endl;
-	cout<<"xps_peak_value "<<spec_peak_value<<" AUtime"<<endl;
-	cout<<"xps_peak_point "<<spec_peak_point<<" Hartree"<<endl;
+	cout<<"xps_peak_value "<<spec_peak_value/hartree<<" 1/eV"<<endl;
+	cout<<"xps_peak_point "<<spec_peak_point*hartree<<" eV"<<endl;
 	cout<<"--------------------------------------------------"<<endl;
 
 	//Clean up allocations
