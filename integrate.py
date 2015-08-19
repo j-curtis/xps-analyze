@@ -26,5 +26,23 @@ def main():
 	
 	print in_data.shape
 
+	delta_w = in_data[1,0]-in_data[0,0]	#Step size
+	num_w = in_data.shape[0]	#Number of steps
+
+	out_data = np.zeros(shape=(num_w,3))	#There are three columns for the output
+
+	#We now compute the cumulative integral using trapezoidal rule
+	#We have 
+	#out(w) = int_{-infty}^w du in(u)
+	out_data[:,0] = in_data[:,0]
+	out_data[:,1] = in_data[:,1]
+
+	for i in xrange(num_w):
+		for j in xrange(1,i):
+			out_data[i,2] += 0.5 * delta_w * (in_data[j-1,1]+in_data[j,1])
+
+	#We save to file 
+	np.savetxt(OUTFILE,out_data,delimiter=" ")
+
 if __name__ == "__main__":
 	main()
