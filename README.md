@@ -24,6 +24,8 @@ CLNTOUT = The file where the cumulant will be written to.
 
 XPSOUT = The file where the XPS will be written to.
 
+SPECOUT = The file where the spectral function density and cumulative distribution will be written to.
+
 core_uniform_width = The width of the uniform spectral broadening applied to the core response data. Default of 0.0. Value is in Hartrees.
 
 core_uniform_order = The order of the uniform spectral broadening applied to the core response data. Default of 2.0. Value is unitless.
