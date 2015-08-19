@@ -87,7 +87,7 @@ int main(int argc, char * argv[]){
 	double spec_norm = 0.0;	//This computes the integral of the xps and checks to see if it is close to one
 	double quasi_peak_weight = 0.0;	//This is the weight of the first quasi particle excitation peak. It is the integral of beta(w)/w^2
 	double quasi_peak_shift = 0.0;	//This is the quasi-particle peak shift, given by the integral of beta(w)/w
-	double main_peak_weight = 0.0;	//This computes the "Z" weight of the main quasiparticle peak
+	double sat_peak_weight = 0.0;	//This computes the weight of the satellite  peaks
 	double spec_peak_value = 0.0; //This is the global maximum of the spectral function
 	double spec_peak_point = 0.0;	//This will be used to record the location of the maxima of the spectral function
 
@@ -300,7 +300,7 @@ int main(int argc, char * argv[]){
 	complex<double> pole_shift = (1.0e-30)*I;	//We make it imaginary and small
 
 	for(int i = 0; i < num_beta_steps; i++){
-		quasi_peak_weight +=  0.5 * delta_w_beta * real(
+		sat_peak_weight +=  0.5 * delta_w_beta * real(
 					beta[i  ]/pow(beta_freqs[i  ]-pole_shift,2)+
 					beta[i-1]/pow(beta_freqs[i-1]-pole_shift,2));
 
@@ -309,7 +309,7 @@ int main(int argc, char * argv[]){
 					beta[i-1]/pow(beta_freqs[i-1]-pole_shift,1));
 	}
 
-	main_peak_weight = exp(-quasi_peak_weight);
+	quasi_peak_weight = exp(-sat_peak_weight);
 
 
 	for(int i = 0; i < num_clnt_steps; i++){
@@ -426,8 +426,8 @@ int main(int argc, char * argv[]){
 	cout<<"coreav1 "<<coreav1<<" Hartree"<<endl;
 	cout<<"coreav2 "<<coreav2<<" Hartree"<<endl;
 	cout<<"quasi_peak_shift "<<quasi_peak_shift*hartree<<" eV"<<endl;
+	cout<<"sat_peak_weight "<<sat_peak_weight<<endl;
 	cout<<"quasi_peak_weight "<<quasi_peak_weight<<endl;
-	cout<<"sat_peak_weight "<<main_peak_weight<<endl;
 	cout<<"spec_norm "<<spec_norm<<endl;
 	cout<<"xps_peak_value "<<spec_peak_value/hartree<<" 1/eV"<<endl;
 	cout<<"xps_peak_point "<<spec_peak_point*hartree<<" eV"<<endl;
