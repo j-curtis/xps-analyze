@@ -53,12 +53,14 @@ int main(int argc, char * argv[]){
 	double * beta_freqs = NULL;	//The frequencies array for beta
 	double * clnt_times = NULL;	//The times for the cumulant 
 	double * xps_freqs = NULL;		//The frequencies for the xps used
-
+	double * spec_freqs = NULL;		//The array of frequencies for the spectral function
 
 	double * core = NULL;		//The core response values
 	double * beta = NULL;			//The beta values
 	complex<double> * clnt = NULL;	//The cumulant values
 	complex<double> * xps = NULL;	//The xps spectrum
+	double * spec_den = NULL;	//The spectral function density
+	double * spec_cum = NULL;	//The spectral function cumulative distribution
 
 	double core_uniform_width = 0.0;	//The width of the uniform widening used on the core data. Default of 0.0
 	double core_uniform_order = 2.0;	//The order of the uniform widening used on the core data. Default of 2.0
@@ -97,6 +99,7 @@ int main(int argc, char * argv[]){
 	string BETAOUT;
 	string CLNTOUT;
 	string XPSOUT;
+	string SPECOUT;
 	
 	cout<<"--------------------------------------------------"<<endl;
 	//First we load in the data from a parameter file passed by command line arg
@@ -122,6 +125,7 @@ int main(int argc, char * argv[]){
 		parse_str(label,value,"BETAOUT",BETAOUT);
 		parse_str(label,value,"CLNTOUT",CLNTOUT);
 		parse_str(label,value,"XPSOUT",XPSOUT);
+		parse_str(label,value,"SPECOUT",SPECOUT);
 
 		parse_int(label,value,"num_beta_steps",num_beta_steps);
 		parse_int(label,value,"num_clnt_steps",num_clnt_steps);
@@ -352,6 +356,34 @@ int main(int argc, char * argv[]){
 	}
 
 	cout<<"Done"<<endl;
+	cout<<"Computing Cumulative Spectral Function..."<<endl;
+	//We compute the spectral function and its cumulative distribution and print them to a file 
+	//We also flip the spectral function around and center the main peak
+	//First we compute the spectral function
+	//We do this by taking the imag(XPS) and getting each entry in reverse order, then putting that into the spectral function entry
+	//We allocate the arrays
+	spec_freqs = new double[num_xps_steps];
+	spec_den = new double[num_xps_steps];
+	spec_cum = new double[num_xps_steps];
+
+	//Next we fill the spectral function array
+	//We also fill the frequencies
+	//we fill in reverse order and also flip the sign and subtract off spec_peak_point
+	for(int i = 0; i < num_xps_steps; i++){
+		spec_den[i] = imag(xps[num_xps_steps-1-i]);	//This flips the order
+		spec_freqs[i] = -(xps_freqs[num_xps_steps-1-i] - spec_peak_point);
+	}
+
+	//Now we compute the cumulative distribution 
+	//We use trapezoidal rule 
+	for(int i = 0; i < num_xps_steps; i++){
+		spec_cum[i] = 0.0;	//Zero out the value
+		for(int j = 1; j < i; j++){
+			//We only integrate up to i as this is the indefinite integral we are computing 
+			spec_cum[i] += 0.5 * delta_w_xps * (spec_den[j-1]+spec_den[j]);
+		}
+	}
+	cout<<"Done"<<endl;
 	cout<<"Saving calculations..."<<endl;
 
 	//We write the outputs to files
@@ -359,6 +391,7 @@ int main(int argc, char * argv[]){
 	ofstream betaout(BETAOUT.c_str());
 	ofstream clntout(CLNTOUT.c_str());
 	ofstream xpsout(XPSOUT.c_str());
+	ofstream specout(SPECOUT.c_str());
 
 	for(int i = 0; i < num_core_steps; i++){
 		//We convert the time to fs and the core to Hartrees
@@ -376,11 +409,16 @@ int main(int argc, char * argv[]){
 		//We convert frequency to eV and the XPS we convert to fs
 		xpsout<<hartree*xps_freqs[i]<<" "<<real(xps[i])/hartree<<" "<<imag(xps[i])/hartree<<endl;
 	}
+	for(int i = 0; i < num_xps_steps; i++){
+		//We convert the frequency to eV and the spectral function to 1/eV. The cumulative is unitless
+		specout<<hartree*spec_freqs[i]<<" "<<spec_den[i]/hartree<<" "<<spec_cum[i]<<endl;
+	}
 
 	coreout.close();
 	betaout.close();
 	clntout.close();
 	xpsout.close();
+	specout.close();
 
 	cout<<"Done"<<endl;
 	cout<<"Dumping parameters..."<<endl;
@@ -394,6 +432,7 @@ int main(int argc, char * argv[]){
 	cout<<"BETAOUT "<<BETAOUT<<endl;
 	cout<<"CLNTOUT "<<CLNTOUT<<endl;
 	cout<<"XPSOUT "<<XPSOUT<<endl;
+	cout<<"SPECOUT "<<SPECOUT<<endl;
 	cout<<endl;
 	cout<<"num_core_steps "<<num_core_steps<<endl;
 	cout<<"num_beta_steps "<<num_beta_steps<<endl;
@@ -441,6 +480,9 @@ int main(int argc, char * argv[]){
 	delete [] clnt;
 	delete [] xps_freqs;
 	delete [] xps;
+	delete [] spec_freqs;
+	delete [] spec_den;
+	delete [] spec_cum;
 
 	return 0;
 }

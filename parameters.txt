@@ -21,6 +21,8 @@ The flags are as follows (note the # beginning the lines so that they are not in
 
 # XPSOUT = (string) the file where the XPS will be written to
 
+#SPECOUT = (string) the file where the spectral function and cumulative distribution will be written to
+
 # num_beta_steps = (int) the number of frequency steps we compute beta for. Default is num_core_steps. 
 
 # num_clnt_steps = (int) the number of time steps we compute the cumulant for. Default is num_core_steps. 
@@ -58,6 +60,7 @@ COREOUT core.dat
 BETAOUT beta.dat
 CLNTOUT clnt.dat
 XPSOUT xps.dat
+SPECOUT spec.dat
 
 num_beta_steps 4000
 num_clnt_steps 4000
