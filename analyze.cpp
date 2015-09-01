@@ -42,6 +42,24 @@ void parse_str(string label, string value, const string reference, string& varia
 	}
 }
 
+//This function will snap a given point onto a grid 
+//It will return the largest array index that has a value less than the passed value
+//If the element is out of bounds, it will return 0 or arrysize-1 depending on which end of the array it crosses
+//It assumes that the array is uniformly spaced
+int snapToGrid(double x, int size, double * arry){
+  //First we deal with the case that x<values[0]
+  if(x<arry[0]){
+    return 0;
+  }
+  //Next, if it is in the array range
+  else if(x<arry[size-1]){
+    return floor( (x-arry[0])/(arry[1]-arry[0]) ); //We assume the array is uniform and has spacing values[1]-values[0]
+  }
+  else{
+    return size-1;  //It is larger than the largest entry so we return the largest index
+  }
+}
+
 int main(int argc, char * argv[]){
 	//Analysis variables and parameters
 	int num_core_steps = 0;	//The number of times steps in our core response
@@ -376,6 +394,7 @@ int main(int argc, char * argv[]){
 
 	//Now we compute the cumulative distribution 
 	//We use trapezoidal rule 
+
 	for(int i = 0; i < num_xps_steps; i++){
 		spec_cum[i] = 0.0;	//Zero out the value
 		for(int j = 1; j < i; j++){
@@ -422,6 +441,15 @@ int main(int argc, char * argv[]){
 
 	cout<<"Done"<<endl;
 	cout<<"Dumping parameters..."<<endl;
+	
+	//Now we compute the sumulative weight below a certain value
+	//We want to know the integral of the XPS up to a given cutoff
+	//If the cutoff is x and C is the inetgral of the spectral function,
+	//Where the spectral function is the XPS flipped around the central peak,
+	//Then we want int_{-infty}^x XPS(t)dt = 1-cumulative(-x)
+	double weight_below_E = -5.0/hartree;	//We check the spectral weight up to this value (in eV). We convert to hartree by dividing by hartree
+	int weight_below_E_index = snapToGrid(-weight_below_E,num_xps_steps,spec_freqs);	//This is the index of the weight for Cumlative(-weight_below_E) 
+	double weight_below = 1.0 - spec_cum[weight_below_E_index]; //The cumulative weight of the XPS below the given cutoff. Note it is 1-cumulative because that is reveresed about the origin	
 
 	//Now we write all the parameters to standard out 
 	//The parameters are all written in atomic units 
@@ -470,6 +498,7 @@ int main(int argc, char * argv[]){
 	cout<<"spec_norm "<<spec_norm<<endl;
 	cout<<"xps_peak_value "<<spec_peak_value/hartree<<" 1/eV"<<endl;
 	cout<<"xps_peak_point "<<spec_peak_point*hartree<<" eV"<<endl;
+	cout<<"XPS weight below "<<weight_below_E*hartree<<" eV: "<<weight_below<<endl;
 	cout<<"--------------------------------------------------"<<endl;
 
 	//Clean up allocations
