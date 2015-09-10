@@ -94,7 +94,7 @@ int main(int argc, char * argv[]){
 		line_count++;	//Increment the counter
 	}
 
-	const double background_ratio = .1;	//This is the relative ratio of the background term
+	const double background_ratio = .05;	//[1/eV] This is the relative ratio of the background term
 	cout<<"background ratio: "<<background_ratio<<endl;
 
 	//We use a signal of 
