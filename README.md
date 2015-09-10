@@ -56,5 +56,5 @@ It is, in theory, possible to parse the output of the program into the program t
 
 The program add_background.cpp/bin accepts as an argument (in this order) an XPS file, then a SPEC file, and then the name of the output file. It uses the cumulative spectral function from SPEC to generate a background term and add it to the XPS from the XPS file. 
 This is then printed to the output file with the columns: frequency, XPS+background, XPS, background.
-It requires the XPS and SPEC files to use the same frequency grids. It also uses a preset background scaling constant which is a parameter in the program itself. This is called 'background_ratio' and is used to determine the relative weight of the background term (and has units of eV, so that the background term units work out).
+It requires the XPS and SPEC files to use the same frequency grids. It also uses a preset background scaling constant which is a parameter in the program itself. This is called 'background_ratio' and is used to determine the relative weight of the background term (and has units of 1/eV, so that the background term units work out).
 
