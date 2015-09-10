@@ -447,7 +447,7 @@ int main(int argc, char * argv[]){
 	//If the cutoff is x and C is the inetgral of the spectral function,
 	//Where the spectral function is the XPS flipped around the central peak,
 	//Then we want int_{-infty}^x XPS(t)dt = 1-cumulative(-x)
-	double weight_below_E = -5.0/hartree;	//We check the spectral weight up to this value (in eV). We convert to hartree by dividing by hartree
+	double weight_below_E = -2.0/hartree;	//We check the spectral weight up to this value (in eV). We convert to hartree by dividing by hartree
 	int weight_below_E_index = snapToGrid(-weight_below_E,num_xps_steps,spec_freqs);	//This is the index of the weight for Cumlative(-weight_below_E) 
 	double weight_below = 1.0 - spec_cum[weight_below_E_index]; //The cumulative weight of the XPS below the given cutoff. Note it is 1-cumulative because that is reveresed about the origin	
 
@@ -492,13 +492,15 @@ int main(int argc, char * argv[]){
 	cout<<endl;
 	cout<<"coreav1 "<<coreav1<<" Hartree"<<endl;
 	cout<<"coreav2 "<<coreav2<<" Hartree"<<endl;
-	cout<<"quasi_peak_shift "<<quasi_peak_shift*hartree<<" eV"<<endl;
-	cout<<"sat_peak_weight "<<sat_peak_weight<<endl;
-	cout<<"quasi_peak_weight "<<quasi_peak_weight<<endl;
+	cout<<"sat_peak_integral "<<sat_peak_weight<<endl;
+	cout<<"QP_peak_shift "<<quasi_peak_shift*hartree<<" eV"<<endl;
+	cout<<"QP_peak_weight "<<quasi_peak_weight<<endl;
+	cout<<"sat_peak_weight "<<1-quasi_peak_weight<<endl;
+	cout<<"XPS weight below "<<weight_below_E*hartree<<" eV: "<<weight_below<<endl;
+	cout<<"XPS weight above "<<weight_below_E*hartree<<" eV: "<<1.0-weight_below<<endl;
 	cout<<"spec_norm "<<spec_norm<<endl;
 	cout<<"xps_peak_value "<<spec_peak_value/hartree<<" 1/eV"<<endl;
 	cout<<"xps_peak_point "<<spec_peak_point*hartree<<" eV"<<endl;
-	cout<<"XPS weight below "<<weight_below_E*hartree<<" eV: "<<weight_below<<endl;
 	cout<<"--------------------------------------------------"<<endl;
 
 	//Clean up allocations
